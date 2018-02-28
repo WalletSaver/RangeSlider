@@ -191,6 +191,8 @@ public class RangeSlider: UIControl {
 
   @IBInspectable public var moveLowerThumb: Bool = false
 
+  @IBInspectable public var moveLessThenLower: Bool = false
+
 
   @IBInspectable public var curvaceousness: CGFloat = 1.0 {
     didSet {
@@ -291,10 +293,8 @@ public class RangeSlider: UIControl {
     previouslocation = touch.location(in: self)
 
     // Hit test the thumb layers
-    if lowerThumbLayer.frame.contains(previouslocation) {
-      if moveLowerThumb {
-        lowerThumbLayer.highlighted = true
-      }
+    if moveLowerThumb && lowerThumbLayer.frame.contains(previouslocation) {
+      lowerThumbLayer.highlighted = true
     } else if upperThumbLayer.frame.contains(previouslocation) {
       upperThumbLayer.highlighted = true
     }
@@ -315,7 +315,11 @@ public class RangeSlider: UIControl {
     if lowerThumbLayer.highlighted {
       lowerValue = boundValue(lowerValue + deltaValue, toLowerValue: minimumValue, upperValue: upperValue - gapBetweenThumbs)
     } else if upperThumbLayer.highlighted {
-      upperValue = boundValue(upperValue + deltaValue, toLowerValue: lowerValue + gapBetweenThumbs, upperValue: maximumValue)
+      if moveLessThenLower {
+        upperValue = boundValue(upperValue + deltaValue, toLowerValue: minimumValue - 1, upperValue: maximumValue)
+      } else {
+        upperValue = boundValue(upperValue + deltaValue, toLowerValue: lowerValue + gapBetweenThumbs, upperValue: maximumValue)
+      }
     }
 
     sendActions(for: .valueChanged)
@@ -328,3 +332,4 @@ public class RangeSlider: UIControl {
     upperThumbLayer.highlighted = false
   }
 }
+
