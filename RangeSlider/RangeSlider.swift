@@ -316,7 +316,7 @@ public class RangeSlider: UIControl {
       lowerValue = boundValue(lowerValue + deltaValue, toLowerValue: minimumValue, upperValue: upperValue - gapBetweenThumbs)
     } else if upperThumbLayer.highlighted {
       if moveLessThenLower {
-        upperValue = boundValue(upperValue + deltaValue, toLowerValue: minimumValue - 1, upperValue: maximumValue)
+        upperValue = boundValue(upperValue + deltaValue, toLowerValue: minimumValue, upperValue: maximumValue)
       } else {
         upperValue = boundValue(upperValue + deltaValue, toLowerValue: lowerValue + gapBetweenThumbs, upperValue: maximumValue)
       }
@@ -332,4 +332,3 @@ public class RangeSlider: UIControl {
     upperThumbLayer.highlighted = false
   }
 }
-
